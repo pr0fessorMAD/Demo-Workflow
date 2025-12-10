@@ -1,4 +1,4 @@
-name: 4. Event Triggers Demo
+name: Event Triggers Demo
 
 # Triggers for this workflow:
 on:

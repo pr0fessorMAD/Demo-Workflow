@@ -1,4 +1,4 @@
-name: 5. Environment Variables Scopes Demo
+name: Environment Variables Scopes Demo
 
 on:
   workflow_dispatch:

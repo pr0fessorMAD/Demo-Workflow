@@ -1,4 +1,4 @@
-name: 6. Data Passing Demo
+name: Data Passing Demo
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: 3. Workflow DAG Structure Demo (needs)
+name: Workflow DAG Structure Demo (needs)
 
 on:
   workflow_dispatch:
