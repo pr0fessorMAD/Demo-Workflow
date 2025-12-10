@@ -1,0 +1,37 @@
+name: 5. Environment Variables Scopes Demo
+
+on:
+  workflow_dispatch:
+
+# 1. Global (Workflow) Environment Variable
+env:
+  GLOBAL_VAR: "This variable is available in ALL jobs."
+  DEFAULT_USER: "ci_runner"
+
+jobs:
+  env-scopes-job:
+    runs-on: ubuntu-latest
+    
+    # 2. Job Environment Variable
+    env:
+      JOB_VAR: "This variable is available ONLY in 'env-scopes-job'."
+      JOB_TIMEOUT: 60
+
+    steps:
+      - name: 3. Access Variables
+        # 3. Step Environment Variable (set using the shell)
+        run: |
+          STEP_VAR="This variable is available ONLY in this step."
+          
+          echo "--- Accessing Variables ---"
+          echo "Global Var: $GLOBAL_VAR"
+          echo "Job Var: $JOB_VAR"
+          echo "Step Var: $STEP_VAR"
+          echo "Default User: $DEFAULT_USER"
+          echo "Job Timeout: $JOB_TIMEOUT seconds"
+          
+      - name: 4. Try to access the Step Variable from a new step
+        run: |
+          echo "Trying to access STEP_VAR in a new step..."
+          # This will output an empty string, showing its scope is local to the previous step.
+          echo "Step Var: $STEP_VAR"

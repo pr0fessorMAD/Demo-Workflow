@@ -1,0 +1,45 @@
+name: 6. Data Passing Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  producer-job:
+    runs-on: ubuntu-latest
+    # Define outputs this job will produce for others
+    outputs:
+      artifact_name: ${{ steps.set-inter-job-output.outputs.artifact_name }}
+
+    steps:
+      # Option A: Intra-Job Data Passing (Step -> Downstream Step in same job)
+      - name: A.1 Set Variable for Downstream Steps (Intra-Job)
+        id: set-intra-job-var
+        run: |
+          GENERATED_VERSION="1.2.3"
+          # Set the variable in the special $GITHUB_ENV file
+          echo "GENERATED_VERSION=$GENERATED_VERSION" >> $GITHUB_ENV
+          echo "::notice title=Data Pass A::Set GENERATED_VERSION for next steps."
+          
+      - name: A.2 Use the Variable (Intra-Job)
+        run: |
+          echo "The generated version (Intra-Job) is: ${{ env.GENERATED_VERSION }}" 
+          
+      # Option B: Inter-Job Data Passing (Job -> Downstream Job)
+      - name: B.1 Set Output for Downstream Job (Inter-Job)
+        id: set-inter-job-output
+        run: echo "artifact_name=app-build-${{ github.sha }}" >> $GITHUB_OUTPUT
+        # The key is: >> $GITHUB_OUTPUT. This makes the variable available to other jobs.
+
+  consumer-job:
+    runs-on: ubuntu-latest
+    needs: [producer-job] # Must wait for the producer
+    
+    steps:
+      - name: B.2 Use Output from Producer Job (Inter-Job)
+        run: |
+          ARTIFACT_NAME="${{ needs.producer-job.outputs.artifact_name }}"
+          echo "The artifact name passed from 'producer-job' is: $ARTIFACT_NAME"
+          
+          # We CANNOT access GENERATED_VERSION here because it was only set in $GITHUB_ENV,
+          # which is reset between jobs.
+          echo "Attempting to access GENERATED_VERSION (will be empty): ${{ env.GENERATED_VERSION }}"
