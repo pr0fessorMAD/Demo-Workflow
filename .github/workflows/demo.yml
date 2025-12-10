@@ -1,0 +1,24 @@
+name: Demo Workflow
+
+# The "Event" - When does this run?
+on:
+  push:
+    branches: [ "main" ]      # Runs when you push code to main
+  workflow_dispatch:          # Allows you to click a button to run it manually
+
+# The "Jobs" - What are we doing?
+jobs:
+  explore-github-actions:
+    runs-on: ubuntu-latest    # The "Runner" - We are borrowing a Linux server from GitHub
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6 # Uses a pre-made action to download your code to the runner
+      
+      - name: Print a greeting
+        run: echo "Hello, Team! This action was triggered by a ${{ github.event_name }} event."
+      
+      - name: List files in the repository
+        run: |
+          echo "Here are the files in this repository:"
+          ls -R
