@@ -7,22 +7,22 @@ jobs:
   step-types-job:
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Inline Shell Command (run)
+      - name: Inline Shell Command (run)
         run: |
           echo "This step uses 'run' to execute a simple inline shell script."
           echo "Current directory is $(pwd)"
 
-      - name: 2. Using an Official Marketplace Action (uses)
+      - name: Using an Official Marketplace Action (uses)
         # This action checks out the code from the repo onto the runner.
         uses: actions/checkout@v6
         
-      - name: 3. Using a Setup Action to Install a Tool (uses)
+      - name: Using a Setup Action to Install a Tool (uses)
         # This is a common pattern to set up an environment (e.g., Node.js, Python, Go).
         uses: actions/setup-node@v6
         with:
           node-version: '20'
 
-      - name: 4. Verify the installed tool (run)
+      - name: Verify the installed tool (run)
         run: |
           echo "Node.js is now available on the runner."
           node -v
